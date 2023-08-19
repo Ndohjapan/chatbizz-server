@@ -1,4 +1,7 @@
 let admin = require('firebase-admin');
+const config = require('config');
+const jwtConfig = config.get('jwt');
+const jwt = require('jsonwebtoken');
 
 let serviceAccount = require('../../serviceAccount.json');
 
@@ -11,12 +14,11 @@ class AuthService {
 
   }
 
-  SignUp(token){
-    admin.auth().verifyIdToken(token).then(decodedToken => {
-      let uid = decodedToken.uid;
-    }).catch(err => {
-      console.log(err);
-    });
+  async Login(idToken){
+    const decoded = await admin.auth().verifyIdToken(idToken);
+    const secretKey = jwtConfig.secret;
+    const token = jwt.sign({ email: decoded.email, uid: decoded.uid, name: decoded.name }, secretKey, { expiresIn: '1d' });
+    return {token};
   }
 
 }

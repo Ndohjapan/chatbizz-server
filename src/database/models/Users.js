@@ -1,18 +1,16 @@
 let mongoose = require('mongoose');
+const en = require('../../../locale/en');
 let Schema = mongoose.Schema;
 
-let UserSchema = new Schema({
-  uid: {
-    type: String,
-    required: true,
+let UserSchema = new Schema(
+  {
+    uid: {
+      type: String,
+      required: [true, en['uid-required']],
+      unique: true,
+    },
   },
-  email: {
-    type: String,
-    required: true,
-  },
-  displayName: {
-    type: String,
-  },
-});
+  { timestamps: true },
+);
 
-mongoose.model('users', UserSchema);
+module.exports = mongoose.model('users', UserSchema);
