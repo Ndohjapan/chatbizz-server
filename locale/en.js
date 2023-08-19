@@ -4,5 +4,7 @@ module.exports = {
   'page-not-found': 'Page Not Found',
   'uid-required': 'Uid not found',
   'uid-unique': 'Uid must be unique',
-  'user-not-found': 'User not found'
+  'user-not-found': 'User not found',
+  'login-failure': 'Invalid credentials',
+  'authentication-failure': 'Invalid Token, Login'
 };
