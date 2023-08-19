@@ -7,7 +7,7 @@ const { interceptorParam } = require('./middlewares/logger');
 const errorHandler = require('./errors/error-handler');
 const en = require('../locale/en');
 const NotFundException = require('./errors/not-found-exception');
-const { auth, user } = require('./routes');
+const { auth, user, store } = require('./routes');
 const { securityResponseHeader } = require('./middlewares/res-secure-header');
 
 const app = express();
@@ -29,6 +29,7 @@ if (process.env.NODE_ENV !== 'test') {
 const baseRoute = '/api/1.0';
 app.use(baseRoute+'/auth', auth);
 app.use(baseRoute+'/users', user);
+app.use(baseRoute+'/stores', store);
 
 app.use((req, res, next) => {
   next(new NotFundException(en['page-not-found']));

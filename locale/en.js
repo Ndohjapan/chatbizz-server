@@ -6,5 +6,17 @@ module.exports = {
   'uid-unique': 'Uid must be unique',
   'user-not-found': 'User not found',
   'login-failure': 'Invalid credentials',
-  'authentication-failure': 'Invalid Token, Login'
+  'authentication-failure': 'Invalid Token, Login',
+  'whatsapp-num-required': 'Whatsapp number is required',
+  'whatsapp-num-invalid': 'Whatsapp number is invalid',
+  'whatsapp-num-unique': 'Whatsapp number already exists',
+  'store-type-required': 'Store Type is required',
+  'store-type-format': 'Store Type must be a string',
+  'store-type-invalid': 'Store Type is invalid. Must be an Ecommerce or Digital store',
+  'user-id-required': 'User Id is required',
+  'store-name-required': 'Store name is required',
+  'store-name-format': 'Store name must be a string',
+  'about-store-required': 'Information about your store is required',
+  'about-store-format': 'About must be string',
+  'stores-not-found': 'Cannot find store(s)'
 };
