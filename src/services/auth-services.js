@@ -4,7 +4,7 @@ const jwtConfig = config.get('jwt');
 const jwt = require('jsonwebtoken');
 const UserRepository = require('../database/repositories/user-repository');
 
-let serviceAccount = require('../../serviceAccount.json');
+let serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
