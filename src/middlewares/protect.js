@@ -13,7 +13,8 @@ const userAuth = async (req, res, next) => {
     const token = req.headers['x-access-token'];
     const decoded = jwt.verify(token, jwtConfig.secret);
 
-    let result = await user.FindByEmail(decoded.uid);
+    let result = await user.FindByUid(decoded);
+
 
     if (result) {
       req.user = result;
