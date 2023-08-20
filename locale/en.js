@@ -18,5 +18,8 @@ module.exports = {
   'store-name-format': 'Store name must be a string',
   'about-store-required': 'Information about your store is required',
   'about-store-format': 'About must be string',
-  'stores-not-found': 'Cannot find store(s)'
+  'qr-store-error': 'Cannot create qr for this store',
+  'qr-store-already-connected': 'Store is already connected; Disconnect to generate QR',
+  'stores-not-found': 'Cannot find store(s)',
+  'country-code-error': 'Invalid country calling code'
 };
