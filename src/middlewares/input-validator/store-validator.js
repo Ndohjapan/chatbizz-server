@@ -1,9 +1,6 @@
 const { validationResult, check, param } = require('express-validator');
 const en = require('../../../locale/en');
 const ValidationException = require('../../errors/validation-exception');
-const { PhoneNumberUtil } = require('google-libphonenumber');
-
-const phoneUtil = PhoneNumberUtil.getInstance();
 
 const validateCreateStoreInput = [
   check('name')
@@ -31,15 +28,14 @@ const validateCreateStoreInput = [
     .notEmpty()
     .withMessage(en['whatsapp-num-required'])
     .bail()
-    .isMobilePhone()
+    .isString()
     .withMessage(en['whatsapp-num-invalid'])
     .bail()
-    .custom((value) => {
-      if (!phoneUtil.isValidNumber(phoneUtil.parseAndKeepRawInput(value))) {
-        throw new Error(en['whatsapp-num-invalid']);
-      }
-      return true;
-    }),
+    .matches(/^\+.*$/)
+    .withMessage(en['whatsapp-num-invalid'])
+    .bail()
+    .isMobilePhone()
+    .withMessage(en['whatsapp-num-invalid']),
 
   (req, res, next) => {
     const errors = validationResult(req);
@@ -54,6 +50,12 @@ const validateQRCodePhoneParams = [
   param('phone')
     .notEmpty()
     .withMessage(en['whatsapp-num-required'])
+    .bail()
+    .isString()
+    .withMessage(en['whatsapp-num-invalid'])
+    .bail()
+    .matches(/^\+.*$/)
+    .withMessage(en['whatsapp-num-invalid'])
     .bail()
     .isMobilePhone()
     .withMessage(en['whatsapp-num-invalid']),

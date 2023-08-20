@@ -135,3 +135,7 @@ node_modules
 
 # service account
 serviceAccount.json
+
+# wwebjs
+.wwebjs_auth
+.wwebjs_cache

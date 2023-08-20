@@ -29,7 +29,10 @@ router.get(
   userAuth,
   validateQRCodePhoneParams,
   catchAsync(async(req, res) => {
-
+    const whatsappNumber = req.params.phone;
+    const user = req.user.id;
+    const qrimage = await service.CreateQr(whatsappNumber, user);
+    res.send(qrimage);
   })
 );
 

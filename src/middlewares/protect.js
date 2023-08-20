@@ -15,7 +15,6 @@ const userAuth = async (req, res, next) => {
 
     let result = await user.FindByUid(decoded);
 
-
     if (result) {
       req.user = result;
       return next();
