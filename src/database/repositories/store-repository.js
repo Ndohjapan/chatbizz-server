@@ -6,7 +6,13 @@ const { Stores } = require('../models');
 class StoreRepository {
   async CreateStore({ name, whatsappNumber, storeType, user, about }) {
     try {
-      const store = await Stores.create({name, whatsappNumber, storeType, user, about});
+      const store = await Stores.create({
+        name,
+        whatsappNumber,
+        storeType,
+        user,
+        about,
+      });
       store.whatsappConnected = undefined;
       return store;
     } catch (error) {
@@ -17,19 +23,19 @@ class StoreRepository {
     }
   }
 
-  async FindAllStores({user}){
+  async FindAllStores({ user }) {
     try {
-      const stores = await Stores.find({user, active: true});
+      const stores = await Stores.find({ user, active: true });
       return stores;
     } catch (error) {
       throw new notFoundException(en['stores-not-found']);
     }
   }
 
-  async FindStoreById({user, _id}){
+  async FindStoreById({ user, _id }) {
     try {
-      const store = await Stores.findOne({user, _id, active: true});
-      if(store){
+      const store = await Stores.findOne({ user, _id, active: true });
+      if (store) {
         return store;
       }
       throw new notFoundException(en['stores-not-found']);
@@ -38,9 +44,18 @@ class StoreRepository {
     }
   }
 
-  async FindStoreByWANumber({whatsappNumber}){
+  async FindStoreByWANumber({ whatsappNumber }) {
     try {
-      const store = await Stores.findOne({whatsappNumber, active: true});
+      const store = await Stores.findOne({ whatsappNumber, active: true });
+      return store;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async updateStoreByWANumber(whatsappNumber, updateData) {
+    try {
+      const store = await Stores.findOneAndUpdate({ whatsappNumber }, {$set: updateData}, {new: true});
       return store;
     } catch (error) {
       throw new Error(error.message);
