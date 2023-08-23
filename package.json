@@ -49,7 +49,7 @@
     "qrcode": "^1.5.3",
     "socket.io": "^4.7.2",
     "uuid": "^9.0.0",
-    "whatsapp-web.js": "^1.22.1",
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#abac063b779570729476cf42e29dc694e5345ca6",
     "xss-clean": "^0.1.4"
   }
 }
