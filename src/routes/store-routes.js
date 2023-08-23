@@ -13,6 +13,7 @@ const qrcode = require('qrcode');
 const path = require('path');
 const fs = require('fs');
 const StoreRepository = require('../database/repositories/store-repository');
+const en = require('../../locale/en');
 
 const service = new StoreService();
 const repository = new StoreRepository();
@@ -35,10 +36,12 @@ router.get(
   rateLimiter({ secondsWindow: 60, allowedHits: 5 }),
   userAuth,
   validateQRCodePhoneParams,
-  catchAsync(async (req, res) => {
+  catchAsync(async (req, res, next) => {
     let whatsappNumber = req.params.phone;
     const user = req.user.id;
-    const qrimage = await service.CreateQr(whatsappNumber, user);
+    const socket = req.app.get('socket');
+    await service.CreateQr(whatsappNumber, user);
+    res.send(true);
     whatsappNumber = whatsappNumber.split('+')[1];
     const client = new Client({
       puppeteer: {
@@ -52,27 +55,28 @@ router.get(
     client.on('qr', (qr) => {
       qrcode.toDataURL(qr, (err, url) => {
         if (err) {
-          console.error('Error generating QR code:', err);
-          //   (en['server-error']);
-          res.status(500).json({ error: 'Internal Server Error' });
+          console.log('Error generating QR code:', err);
         } else {
-          res.json({ qrCodeUrl: url });
+          socket?.io.emit(`+${whatsappNumber}-qr-code`, url);
         }
       });
     });
 
     client.on('authenticated', async () => {
-      const sessionId = whatsappNumber;
       await repository.updateStoreByWANumber('+' + whatsappNumber, {
         whatsappConnected: true,
       });
-      console.log(`User with session ID ${sessionId} authenticated`);
-      //   io.emit(`${sessionId}`, 'Authenticated successfully');
+      console.log(`User with session ID ${whatsappNumber} authenticated`);
+      socket?.io.emit(`+${whatsappNumber}`, 'Authenticated successfully');
+    });
+
+    client.on('auth_failure', async () => {
+      console.log(`Authentication failed for : ${whatsappNumber}`);
+      socket?.io.emit(`+${whatsappNumber}-error`, 'Authenticated Failed');
     });
 
     client.on('ready', () => {
-      const sessionId = whatsappNumber;
-      console.log(`User with session ID ${sessionId} is ready 🚀`);
+      console.log(`User with session ID ${whatsappNumber} is ready 🚀`);
     });
 
     client.on('message', async (message) => {
@@ -94,7 +98,6 @@ router.get(
 
     client.on('disconnected', async (reason) => {
       console.log('Client was logged out', reason);
-      const sessionId = whatsappNumber;
       await repository.updateStoreByWANumber('+' + whatsappNumber, {
         whatsappConnected: false,
       });
@@ -104,12 +107,14 @@ router.get(
         '..',
         '..',
         '.wwebjs_auth',
-        `session-${sessionId}`,
+        `session-${whatsappNumber}`,
       );
       try {
         await client.destroy();
         await fs.promises.rm(cacheFolderPath, { recursive: true });
-        console.log(`Cleared cached session data for session ID: ${sessionId}`);
+        console.log(
+          `Cleared cached session data for session ID: ${whatsappNumber}`,
+        );
       } catch (error) {
         console.error('Error clearing cached session data:', error);
       }
