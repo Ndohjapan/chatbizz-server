@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "description": "server for chatbizz",
   "main": "index.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "cross-env NODE_ENV=prod node index.js",
     "stage": "cross-env NODE_ENV=stage node index.js",
