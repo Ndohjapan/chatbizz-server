@@ -26,6 +26,10 @@ var StoreSchema = new Schema({
     type: String,
     required: [true, en['about-store-required']]
   },
+  image: {
+    type: String,
+    required: [true, en['image-url-required']]
+  },
   whatsappConnected: {
     type: Boolean,
     required: true,

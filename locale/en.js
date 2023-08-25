@@ -21,5 +21,7 @@ module.exports = {
   'qr-store-error': 'Cannot create qr for this store',
   'qr-store-already-connected': 'Store is already connected; Disconnect to generate QR',
   'stores-not-found': 'Cannot find store(s)',
-  'country-code-error': 'Invalid country calling code'
+  'country-code-error': 'Invalid country calling code',
+  'image-url-required': 'Image url is required',
+  'image-url-format': 'Image must be a valid image url',
 };
