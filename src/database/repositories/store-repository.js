@@ -4,7 +4,7 @@ const notFoundException = require('../../errors/not-found-exception');
 const { Stores } = require('../models');
 
 class StoreRepository {
-  async CreateStore({ name, whatsappNumber, storeType, user, about }) {
+  async CreateStore({ name, whatsappNumber, storeType, user, about, image }) {
     try {
       const store = await Stores.create({
         name,
@@ -12,6 +12,7 @@ class StoreRepository {
         storeType,
         user,
         about,
+        image
       });
       store.whatsappConnected = undefined;
       return store;
@@ -25,7 +26,7 @@ class StoreRepository {
 
   async FindAllStores({ user }) {
     try {
-      const stores = await Stores.find({ user, active: true });
+      const stores = await Stores.find({ user, active: true }, {active: 0});
       return stores;
     } catch (error) {
       throw new notFoundException(en['stores-not-found']);

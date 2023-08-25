@@ -1,5 +1,7 @@
 // seed.js
 const { connectToDatabase, mongoose } = require('./connection');
+const fs = require('fs');
+const path = require('path');
 
 async function up() {
   try {
@@ -19,7 +21,27 @@ async function down() {
 
     await mongoose.connection.dropDatabase();
 
+    const wwebjs_auth = path.join(
+      __dirname,
+      '..',
+      '..',
+      '.wwebjs_auth'
+    );
+    const wwebjs_cache = path.join(
+      __dirname,
+      '..',
+      '..',
+      '.wwebjs_cache'
+    );
+
+    await fs.promises.rm(wwebjs_cache, { recursive: true });
+    await fs.promises.rm(wwebjs_auth, { recursive: true });
+
     console.log('Data removal completed successfully');
+
+    console.log(
+      'Cleared cached session data',
+    );
   } catch (err) {
     console.error('Error removing data from the database:', err);
   } finally {

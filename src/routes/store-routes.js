@@ -124,4 +124,15 @@ router.get(
   }),
 );
 
+router.get(
+  '/',
+  rateLimiter({ secondsWindow: 60, allowedHits: 10}),
+  userAuth,
+  catchAsync(async(req, res) => {
+    const user = req.user.id;
+    const stores = await service.FindAllStores(user);
+    res.send(stores);
+  }),
+);
+
 module.exports = router;

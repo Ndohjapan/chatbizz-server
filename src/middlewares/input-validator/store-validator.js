@@ -15,6 +15,12 @@ const validateCreateStoreInput = [
     .bail()
     .isString()
     .withMessage(en['about-store-format']),
+  check('image')
+    .notEmpty()
+    .withMessage(en['image-url-required'])
+    .bail()
+    .isURL()
+    .withMessage(en['image-url-format']),
   check('storeType')
     .notEmpty()
     .withMessage(en['store-type-required'])
