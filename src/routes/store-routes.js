@@ -52,11 +52,14 @@ router.get(
       }),
     });
 
+    console.log('Whatsapp client enabled');
+
     client.on('qr', (qr) => {
       qrcode.toDataURL(qr, (err, url) => {
         if (err) {
           console.log('Error generating QR code:', err);
         } else {
+          console.log('QR code is ready');
           socket?.io.emit(`+${whatsappNumber}-qr-code`, url);
         }
       });
