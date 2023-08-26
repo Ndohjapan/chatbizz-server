@@ -1,6 +1,7 @@
 const en = require('../../locale/en');
 const ProductRepository = require('../database/repositories/product-repository');
 const StoreRepository = require('../database/repositories/store-repository');
+const VariantRepository = require('../database/repositories/variant-repository');
 const createException = require('../errors/create-exception');
 const notFoundException = require('../errors/not-found-exception');
 
@@ -8,6 +9,7 @@ class ProductService {
   constructor() {
     this.repository = new ProductRepository();
     this.storeRepository = new StoreRepository();
+    this.variantRepository = new VariantRepository();
   }
 
   async CreateProduct(productData, user) {
@@ -23,18 +25,43 @@ class ProductService {
         throw new notFoundException(en['stores-not-found']);
       }
 
-      const product = this.repository.CreateProduct(productData);
+      let variants = productData.variants;
+      delete productData.variant;
+
+      let product = this.repository.CreateProduct(productData);
+
+      const variantData = variants.map((variant) => {
+        return { ...variant, product: product._id };
+      });
+
+      variants = await this.variantRepository.CreateVariant(variantData);
+
+      product = await this.repository.UpdateProductById(
+        store,
+        product._id,
+        variants,
+      );
+
       return product;
     } catch (error) {
       console.log(error);
-      throw new notFoundException(error.message);
+      throw new createException(error.message);
     }
   }
 
-  async FindAllStores(user) {
+  async FindAllProducts(store) {
     try {
-      const stores = await this.repository.FindAllStores({ user });
+      const stores = await this.repository.FindAllProducts({ store });
       return stores;
+    } catch (error) {
+      throw new notFoundException(en['stores-not-found']);
+    }
+  }
+
+  async FindProductById(store, id) {
+    try {
+      const product = await this.repository.FindProductById({store, _id: id});
+      return product;
     } catch (error) {
       throw new notFoundException(en['stores-not-found']);
     }

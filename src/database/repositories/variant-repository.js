@@ -4,7 +4,7 @@ const notFoundException = require('../../errors/not-found-exception');
 const { Variants } = require('../models');
 
 class VariantRepository {
-  async CreateProduct(variantData) {
+  async CreateVariant(variantData) {
     try {
       const variant = await Variants.create(variantData);
       return variant;

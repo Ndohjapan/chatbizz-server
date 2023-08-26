@@ -6,7 +6,6 @@ const { Products } = require('../models');
 class ProductRepository {
   async CreateProduct(productData) {
     try {
-        
       const product = await Products.create(productData);
       return product;
     } catch (error) {
@@ -19,7 +18,10 @@ class ProductRepository {
 
   async FindAllProducts({ store }) {
     try {
-      const products = await Products.find({ store, active: true }, {active: 0}).lean();
+      const products = await Products.find(
+        { store, active: true },
+        { active: 0 },
+      ).lean();
       return products;
     } catch (error) {
       throw new notFoundException(en['products-not-found']);
@@ -28,7 +30,11 @@ class ProductRepository {
 
   async FindProductById({ store, _id }) {
     try {
-      const product = await Products.findOne({ store, _id, active: true }).lean();
+      const product = await Products.findOne({
+        store,
+        _id,
+        active: true,
+      }).lean();
       if (product) {
         return product;
       }
