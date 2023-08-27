@@ -26,7 +26,7 @@ class StoreRepository {
 
   async FindAllStores({ user }) {
     try {
-      const stores = await Stores.find({ user, active: true }, {active: 0});
+      const stores = await Stores.find({ user, active: true }, {active: 0}).lean();
       return stores;
     } catch (error) {
       throw new notFoundException(en['stores-not-found']);
@@ -35,7 +35,7 @@ class StoreRepository {
 
   async FindStoreById({ user, _id }) {
     try {
-      const store = await Stores.findOne({ user, _id, active: true });
+      const store = await Stores.findOne({ user, _id, active: true }).lean();
       if (store) {
         return store;
       }
@@ -47,7 +47,7 @@ class StoreRepository {
 
   async FindStoreByWANumber({ whatsappNumber }) {
     try {
-      const store = await Stores.findOne({ whatsappNumber, active: true });
+      const store = await Stores.findOne({ whatsappNumber, active: true }).lean();
       return store;
     } catch (error) {
       throw new Error(error.message);
@@ -56,7 +56,7 @@ class StoreRepository {
 
   async updateStoreByWANumber(whatsappNumber, updateData) {
     try {
-      const store = await Stores.findOneAndUpdate({ whatsappNumber }, {$set: updateData}, {new: true});
+      const store = await Stores.findOneAndUpdate({ whatsappNumber }, {$set: updateData}, {new: true}).lean();
       return store;
     } catch (error) {
       throw new Error(error.message);

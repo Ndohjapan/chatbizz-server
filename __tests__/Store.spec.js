@@ -34,7 +34,8 @@ describe('Create stores', () => {
   `(
     'returns - "$message" when whatsapNumber is wrongly formatted to "$whatsappNumber" ',
     async ({ whatsappNumber, message }) => {
-      token = await userLogin();
+      let auth = await userLogin();
+      token = auth.token;
       const response = await createStore({ ...store, whatsappNumber });
 
       expect(response.body.validationErrors.whatsappNumber).toBe(message);

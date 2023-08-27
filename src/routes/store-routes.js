@@ -13,7 +13,6 @@ const qrcode = require('qrcode');
 const path = require('path');
 const fs = require('fs');
 const StoreRepository = require('../database/repositories/store-repository');
-const en = require('../../locale/en');
 
 const service = new StoreService();
 const repository = new StoreRepository();
@@ -25,7 +24,7 @@ router.post(
   validateCreateStoreInput,
   catchAsync(async (req, res) => {
     const storeData = req.body;
-    const user = req.user.id;
+    const user = req.user._id;
     const store = await service.CreateStore(storeData, user);
     res.send(store);
   }),
@@ -38,7 +37,7 @@ router.get(
   validateQRCodePhoneParams,
   catchAsync(async (req, res, next) => {
     let whatsappNumber = req.params.phone;
-    const user = req.user.id;
+    const user = req.user._id;
     const socket = req.app.get('socket');
     await service.CreateQr(whatsappNumber, user);
     res.send(true);
@@ -132,7 +131,7 @@ router.get(
   rateLimiter({ secondsWindow: 60, allowedHits: 10}),
   userAuth,
   catchAsync(async(req, res) => {
-    const user = req.user.id;
+    const user = req.user._id;
     const stores = await service.FindAllStores(user);
     res.send(stores);
   }),
