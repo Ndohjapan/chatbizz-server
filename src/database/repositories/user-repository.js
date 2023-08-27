@@ -10,7 +10,7 @@ class UserRepository {
         { uid },
         { uid },
         { upsert: true, new: true },
-      );
+      ).lean();
       return user;
     } catch (error) {
       if (error.name === 'ValidationError') {
@@ -22,7 +22,7 @@ class UserRepository {
 
   async FindByUid(uid) {
     try {
-      const user = await Users.findOne({ uid });
+      const user = await Users.findOne({ uid }).lean();
       if(user){
         return user;
       }
