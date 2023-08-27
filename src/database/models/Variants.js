@@ -15,7 +15,7 @@ var VariantSchema = new Schema({
     type: String,
     required: [true, en['description-required']]
   },
-  feature: {
+  features: {
     type: String,
     required: [true, en['features-required']]
   },
@@ -30,7 +30,7 @@ var VariantSchema = new Schema({
       message: en['image-url-format'],
     },
   },],
-  color: [{
+  colors: [{
     type: String,
   }],
   sizes: [{
