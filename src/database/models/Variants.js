@@ -43,13 +43,7 @@ var VariantSchema = new Schema({
   currency: {
     type: String,
     required: [true, en['currency-required']],
-    enum: ['NGN', 'USD', 'GBP', 'EUR', 'CAD'],
-    validate: {
-      validator: function (v) {
-        return this.currency.enum.includes(v);
-      },
-      message: en['currency-not-supported'],
-    },
+    enum: {values: ['NGN', 'USD', 'GBP', 'EUR', 'CAD'], message: en['currency-not-supported'] },
   },
   weight: {
     type: Number,
@@ -62,49 +56,27 @@ var VariantSchema = new Schema({
   },
   weightUnit: {
     type: String,
-    enum: ['Kg', 'Lbs'],
-    validate: {
-      validator: function (v) {
-        return this.weightUnit.enum.includes(v);
-      },
-      message: en['weight-not-supported'],
-    },
+    enum: {values: ['Kg', 'Lbs'], message: en['weight-not-supported']},
   },
   stock: {
     type: Number,
   },
   stockUnit: {
     type: String,
-    enum: ['Cartons', 'Palletes', 'Packets', 'Boxes'],
-    validate: {
-      validator: function (v) {
-        return this.stockUnit.enum.includes(v);
-      },
-      message: en['stock-unit-not-supported'],
-    },
+    enum: {values: ['Cartons', 'Palletes', 'Packets', 'Boxes', 'Pieces'], message: en['stock-unit-not-supported']},
   },
   dimensions: {
     type: String
   },
   users: {
     type: String,
-    enum: ['Children', 'Adults', 'All'],
-    validate: {
-      validator: function (v) {
-        return this.users.enum.includes(v);
-      },
-      message: en['users-not-supported'],
-    },
+    enum: {values: ['Children', 'Adults', 'All'], message: en['users-not-supported']},
+    default: 'All'
   },
   sex: {
     type: String,
-    enum: ['Male', 'Female'],
-    validate: {
-      validator: function (v) {
-        return this.stockUnit.sex.includes(v);
-      },
-      message: en['sex-not-supported'],
-    },
+    enum: {values: ['Male', 'Female', 'All'], message: en['sex-not-supported']},
+    default: 'All'
   },
   active: {
     type: Boolean,

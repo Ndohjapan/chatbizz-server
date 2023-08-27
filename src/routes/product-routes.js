@@ -4,6 +4,7 @@ const catchAsync = require('../utils/catch-async');
 const { rateLimiter } = require('../middlewares/rate-limiter');
 const { ProductService } = require('../services/product-services');
 const { userAuth } = require('../middlewares/protect');
+const { validateCreateProductInput } = require('../middlewares/input-validator/product-validator');
 
 const service = new ProductService();
 
@@ -11,6 +12,7 @@ router.post(
   '/',
   rateLimiter({ secondsWindow: 60, allowedHits: 5 }),
   userAuth,
+  validateCreateProductInput,
   catchAsync(async (req, res) => {
     const productData = req.body;
     const user = req.user._id;

@@ -28,7 +28,7 @@ class ProductService {
       let variants = productData.variants;
       delete productData.variant;
 
-      let product = this.repository.CreateProduct(productData);
+      let product = await this.repository.CreateProduct(productData);
 
       const variantData = variants.map((variant) => {
         return { ...variant, product: product._id };
@@ -39,7 +39,7 @@ class ProductService {
       product = await this.repository.UpdateProductById(
         store,
         product._id,
-        variants,
+        {variants},
       );
 
       return product;

@@ -14,7 +14,6 @@ module.exports = (err, req, res, next) => {
   }
   if(status > 499){
     message = en['server-error'];
-    console.log(err);
   }
   res.status(status).send({
     path: req.originalUrl,
