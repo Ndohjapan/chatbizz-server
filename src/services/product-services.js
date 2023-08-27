@@ -1,0 +1,71 @@
+const en = require('../../locale/en');
+const ProductRepository = require('../database/repositories/product-repository');
+const StoreRepository = require('../database/repositories/store-repository');
+const VariantRepository = require('../database/repositories/variant-repository');
+const createException = require('../errors/create-exception');
+const notFoundException = require('../errors/not-found-exception');
+
+class ProductService {
+  constructor() {
+    this.repository = new ProductRepository();
+    this.storeRepository = new StoreRepository();
+    this.variantRepository = new VariantRepository();
+  }
+
+  async CreateProduct(productData, user) {
+    try {
+      const { store } = productData;
+
+      const storeExists = await this.storeRepository.FindStoreById({
+        user,
+        _id: store,
+      });
+
+      if (!storeExists) {
+        throw new notFoundException(en['stores-not-found']);
+      }
+
+      let variants = productData.variants;
+      delete productData.variant;
+
+      let product = await this.repository.CreateProduct(productData);
+
+      const variantData = variants.map((variant) => {
+        return { ...variant, product: product._id };
+      });
+
+      variants = await this.variantRepository.CreateVariant(variantData);
+
+      product = await this.repository.UpdateProductById(
+        store,
+        product._id,
+        {variants},
+      );
+
+      return product;
+    } catch (error) {
+      console.log(error);
+      throw new createException(error.message);
+    }
+  }
+
+  async FindAllProducts(store) {
+    try {
+      const stores = await this.repository.FindAllProducts({ store });
+      return stores;
+    } catch (error) {
+      throw new notFoundException(en['stores-not-found']);
+    }
+  }
+
+  async FindProductById(store, id) {
+    try {
+      const product = await this.repository.FindProductById({store, _id: id});
+      return product;
+    } catch (error) {
+      throw new notFoundException(en['stores-not-found']);
+    }
+  }
+}
+
+module.exports = { ProductService };
