@@ -21,27 +21,4 @@ router.post(
   }),
 );
 
-router.get(
-  '/',
-  rateLimiter({ secondsWindow: 60, allowedHits: 10}),
-  userAuth,
-  catchAsync(async(req, res) => {
-    const user = req.user._id;
-    const stores = await service.FindAllStores(user);
-    res.send(stores);
-  }),
-);
-
-router.get(
-  '/:id/store/:store',
-  rateLimiter({ secondsWindow: 60, allowedHits: 10}),
-  userAuth,
-  catchAsync(async(req, res) => {
-    const id = req.params.id;
-    const store = req.params.id;
-    const product = await service.FindProductById(store, id);
-    res.send(product);
-  }),
-);
-
 module.exports = router;
