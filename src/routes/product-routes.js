@@ -27,7 +27,8 @@ router.get(
   userAuth,
   catchAsync(async (req, res) => {
     const uid = req.user.uid;
-    const images = await service.GetProductImages(uid);
+    const nextCursor = req.query.next_cursor;
+    const images = await service.GetProductImages(uid, nextCursor);
     res.send(images);
   }),
 );

@@ -37,11 +37,9 @@ class ProductService {
 
       variants = await this.variantRepository.CreateVariant(variantData);
 
-      product = await this.repository.UpdateProductById(
-        store,
-        product._id,
-        {variants},
-      );
+      product = await this.repository.UpdateProductById(store, product._id, {
+        variants,
+      });
 
       return product;
     } catch (error) {
@@ -61,22 +59,25 @@ class ProductService {
 
   async FindProductById(store, id) {
     try {
-      const product = await this.repository.FindProductById({store, _id: id});
+      const product = await this.repository.FindProductById({ store, _id: id });
       return product;
     } catch (error) {
       throw new notFoundException(en['stores-not-found']);
     }
   }
 
-  async GetProductImages(uid){
+  async GetProductImages(uid, nextCursor) {
     try {
-      const images = await cloudinary.api.resources(
-        { type: 'upload', prefix: `chatbizz/users/${uid}/products` }
-      );
+      const images = await cloudinary.api.resources({
+        type: 'upload',
+        prefix: `chatbizz/users/${uid}/products`,
+        max_results: 2,
+        next_cursor: nextCursor
+      });
 
       return images;
-      
     } catch (error) {
+      console.log(error);
       throw notFoundException(error.message);
     }
   }
