@@ -21,4 +21,15 @@ router.post(
   }),
 );
 
+router.get(
+  '/images',
+  rateLimiter({ secondsWindow: 60, allowedHits: 5 }),
+  userAuth,
+  catchAsync(async (req, res) => {
+    const uid = req.user.uid;
+    const images = await service.GetProductImages(uid);
+    res.send(images);
+  }),
+);
+
 module.exports = router;

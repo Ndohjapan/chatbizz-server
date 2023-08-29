@@ -1,4 +1,5 @@
 const en = require('../../locale/en');
+const { cloudinary } = require('../database/connection');
 const ProductRepository = require('../database/repositories/product-repository');
 const StoreRepository = require('../database/repositories/store-repository');
 const VariantRepository = require('../database/repositories/variant-repository');
@@ -64,6 +65,19 @@ class ProductService {
       return product;
     } catch (error) {
       throw new notFoundException(en['stores-not-found']);
+    }
+  }
+
+  async GetProductImages(uid){
+    try {
+      const images = await cloudinary.api.resources(
+        { type: 'upload', prefix: `chatbizz/users/${uid}/products` }
+      );
+
+      return images;
+      
+    } catch (error) {
+      throw notFoundException(error.message);
     }
   }
 }
