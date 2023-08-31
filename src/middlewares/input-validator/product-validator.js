@@ -78,11 +78,7 @@ const validateCreateProductInput = [
       }
 
       images.forEach((image) => {
-        if (
-          !/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(
-            image,
-          )
-        ) {
+        if (typeof image !== 'object') {
           throw new Error(en['image-url-format']);
         }
       });
@@ -218,9 +214,7 @@ const validateCreateProductInput = [
         if (variant.image) {
           variant.images.forEach((image) => {
             if (
-              !/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(
-                image,
-              )
+              typeof image !== 'object'
             ) {
               throw new Error(en['image-url-format']);
             }

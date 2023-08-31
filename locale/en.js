@@ -13,7 +13,7 @@ module.exports = {
   'features-format': 'Features must be a string',
   'features-required': 'Features is required',
   'image-array': 'Image must be an array',
-  'image-url-format': 'Images must be a valid image url',
+  'image-url-format': 'Images must be a valid object',
   'image-url-required': 'Image url is required',
   'is-variant-required': 'isVariant is required',
   'login-failure': 'Invalid credentials',

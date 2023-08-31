@@ -22,13 +22,15 @@ router.post(
 );
 
 router.get(
-  '/images',
-  rateLimiter({ secondsWindow: 60, allowedHits: 5 }),
+  '/store/:storeId/images',
+  rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
   userAuth,
   catchAsync(async (req, res) => {
     const uid = req.user.uid;
+    const store = req.params.storeId;
     const nextCursor = req.query.next_cursor;
-    const images = await service.GetProductImages(uid, nextCursor);
+    const images = await service.GetProductImages(uid, store, nextCursor);
+    console.log(images);
     res.send(images);
   }),
 );

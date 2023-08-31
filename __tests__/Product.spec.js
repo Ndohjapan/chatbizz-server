@@ -4,6 +4,7 @@ require('./resources/setup');
 const en = require('../locale/en');
 const { userLogin, createStores } = require('./resources/frequent-functions');
 const mockdata = require('./resources/mockdata');
+const { Products } = require('../src/database/models');
 
 let token;
 
@@ -43,7 +44,12 @@ describe('Create Product', () => {
       store: store[0]._id,
     });
 
+    const productDb = await Products.find({});
+
+    console.log(productDb[0].variants);
+
     expect(response.body.name).toBe(mockdata.product1.name);
+    expect(response.body.variants[0].image).toBe(mockdata.product1.variants[0].images[0].secure_url);
   });
 
   it('return - HTTP 200 OK when we pass an empty weight for a variant ', async() => {
