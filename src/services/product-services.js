@@ -50,10 +50,10 @@ class ProductService {
 
   async FindAllProducts(store) {
     try {
-      const stores = await this.repository.FindAllProducts({ store });
-      return stores;
+      const products = await this.repository.FindAllProducts({ store });
+      return products;
     } catch (error) {
-      throw new notFoundException(en['stores-not-found']);
+      throw new notFoundException(en['products-not-found']);
     }
   }
 

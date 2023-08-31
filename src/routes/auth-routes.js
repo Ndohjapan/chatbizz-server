@@ -8,7 +8,7 @@ const service = new AuthService();
 
 router.post(
   '/login',
-  rateLimiter({ secondsWindow: 60, allowedHits: 5 }),
+  rateLimiter({ secondsWindow: 60, allowedHits: 10 }),
   catchAsync(async (req, res) => {
     const data = req.body;
     const user = await service.Login(data.token);

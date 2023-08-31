@@ -29,7 +29,7 @@ module.exports = {
   'products-not-found': 'Cannot find product(s)',
   'qr-store-already-connected': 'Store is already connected; Disconnect to generate QR',
   'qr-store-error': 'Cannot create qr for this store',
-  'rate-limit-exceeded': 'Rate Limit Exceeded',
+  'rate-limit-exceeded': 'Too many requests. Try again later',
   'server-error': 'Something went wrong',
   'sex-not-supported': 'Sex must be one of Male, Female or All',
   'sizes-array': 'Sizes must be an array',

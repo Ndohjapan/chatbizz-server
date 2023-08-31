@@ -22,6 +22,17 @@ router.post(
 );
 
 router.get(
+  '/store/:storeId',
+  rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
+  userAuth,
+  catchAsync(async (req, res) => {
+    const store = req.params.storeId;
+    const products = await service.FindAllProducts(store);
+    res.send(products);
+  }),
+);
+
+router.get(
   '/store/:storeId/images',
   rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
   userAuth,
@@ -30,7 +41,6 @@ router.get(
     const store = req.params.storeId;
     const nextCursor = req.query.next_cursor;
     const images = await service.GetProductImages(uid, store, nextCursor);
-    console.log(images);
     res.send(images);
   }),
 );
