@@ -124,9 +124,11 @@ const validateCreateProductInput = [
       }
 
       videos.forEach((video) => {
-        if (
-          !/^https:\/\/www\.youtube\.com\/embed\/[a-zA-Z0-9_-]{11}$/.test(video)
-        ) {
+        const youtubeRegex =
+          /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+
+        const isValidYoutubeUrl = youtubeRegex.test(video);
+        if (!isValidYoutubeUrl) {
           throw new Error(en['video-url-format']);
         }
       });
@@ -213,9 +215,7 @@ const validateCreateProductInput = [
 
         if (variant.image) {
           variant.images.forEach((image) => {
-            if (
-              typeof image !== 'object'
-            ) {
+            if (typeof image !== 'object') {
               throw new Error(en['image-url-format']);
             }
           });
