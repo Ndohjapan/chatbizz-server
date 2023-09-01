@@ -21,4 +21,28 @@ router.post(
   }),
 );
 
+router.get(
+  '/store/:storeId',
+  rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
+  userAuth,
+  catchAsync(async (req, res) => {
+    const store = req.params.storeId;
+    const products = await service.FindAllProducts(store);
+    res.send(products);
+  }),
+);
+
+router.get(
+  '/store/:storeId/images',
+  rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
+  userAuth,
+  catchAsync(async (req, res) => {
+    const uid = req.user.uid;
+    const store = req.params.storeId;
+    const nextCursor = req.query.next_cursor;
+    const images = await service.GetProductImages(uid, store, nextCursor);
+    res.send(images);
+  }),
+);
+
 module.exports = router;

@@ -4,38 +4,36 @@ var Schema = mongoose.Schema;
 var VariantSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   product: {
     type: Schema.Types.ObjectId,
     required: [true, en['main-product-required']],
-    ref: 'products'
+    ref: 'products',
   },
   description: {
     type: String,
-    required: [true, en['description-required']]
+    required: [true, en['description-required']],
   },
   features: {
     type: String,
-    required: [true, en['features-required']]
+    required: [true, en['features-required']],
   },
-  images: [    {
-    type: String,
-    validate: {
-      validator: function (v) {
-        return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(
-          v,
-        );
-      },
-      message: en['image-url-format'],
+  images: [
+    {
+      type: Object,
     },
-  },],
-  colors: [{
-    type: String,
-  }],
-  sizes: [{
-    type: String,
-  }],
+  ],
+  colors: [
+    {
+      type: String,
+    },
+  ],
+  sizes: [
+    {
+      type: String,
+    },
+  ],
   price: {
     type: Number,
     required: [true, en['price-required']],
@@ -43,7 +41,10 @@ var VariantSchema = new Schema({
   currency: {
     type: String,
     required: [true, en['currency-required']],
-    enum: {values: ['NGN', 'USD', 'GBP', 'EUR', 'CAD'], message: en['currency-not-supported'] },
+    enum: {
+      values: ['NGN', 'USD', 'GBP', 'EUR', 'CAD'],
+      message: en['currency-not-supported'],
+    },
   },
   weight: {
     type: Number,
@@ -51,38 +52,47 @@ var VariantSchema = new Schema({
       validator: function (v) {
         return typeof v === 'number';
       },
-      message: en['weight-format'],
+      message: en['variant-weight-format'],
     },
   },
   weightUnit: {
     type: String,
-    enum: {values: ['Kg', 'Lbs'], message: en['weight-not-supported']},
+    enum: { values: ['Kg', 'Lbs'], message: en['weight-not-supported'] },
   },
   stock: {
     type: Number,
   },
   stockUnit: {
     type: String,
-    enum: {values: ['Cartons', 'Palletes', 'Packets', 'Boxes', 'Pieces'], message: en['stock-unit-not-supported']},
+    enum: {
+      values: ['Cartons', 'Palletes', 'Packets', 'Boxes', 'Pieces'],
+      message: en['stock-unit-not-supported'],
+    },
   },
   dimensions: {
-    type: String
+    type: String,
   },
   users: {
     type: String,
-    enum: {values: ['Children', 'Adults', 'All'], message: en['users-not-supported']},
-    default: 'All'
+    enum: {
+      values: ['Children', 'Adults', 'All'],
+      message: en['users-not-supported'],
+    },
+    default: 'All',
   },
   sex: {
     type: String,
-    enum: {values: ['Male', 'Female', 'All'], message: en['sex-not-supported']},
-    default: 'All'
+    enum: {
+      values: ['Male', 'Female', 'Unisex'],
+      message: en['sex-not-supported'],
+    },
+    default: 'Unisex',
   },
   active: {
     type: Boolean,
     required: true,
-    default: true
-  }
+    default: true,
+  },
 });
 
 module.exports = mongoose.model('variants', VariantSchema);
