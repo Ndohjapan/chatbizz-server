@@ -128,7 +128,7 @@ router.get(
 
 router.get(
   '/',
-  rateLimiter({ secondsWindow: 60, allowedHits: 10}),
+  rateLimiter({ secondsWindow: 60, allowedHits: 20}),
   userAuth,
   catchAsync(async(req, res) => {
     const user = req.user._id;

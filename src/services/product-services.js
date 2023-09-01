@@ -1,4 +1,5 @@
 const en = require('../../locale/en');
+const { cloudinary } = require('../database/connection');
 const ProductRepository = require('../database/repositories/product-repository');
 const StoreRepository = require('../database/repositories/store-repository');
 const VariantRepository = require('../database/repositories/variant-repository');
@@ -31,16 +32,14 @@ class ProductService {
       let product = await this.repository.CreateProduct(productData);
 
       const variantData = variants.map((variant) => {
-        return { ...variant, product: product._id };
+        return { ...variant, product: product._id, image: variant.images[0]?.secure_url };
       });
 
       variants = await this.variantRepository.CreateVariant(variantData);
 
-      product = await this.repository.UpdateProductById(
-        store,
-        product._id,
-        {variants},
-      );
+      product = await this.repository.UpdateProductById(store, product._id, {
+        variants: variantData
+      });
 
       return product;
     } catch (error) {
@@ -51,19 +50,35 @@ class ProductService {
 
   async FindAllProducts(store) {
     try {
-      const stores = await this.repository.FindAllProducts({ store });
-      return stores;
+      const products = await this.repository.FindAllProducts({ store });
+      return products;
     } catch (error) {
-      throw new notFoundException(en['stores-not-found']);
+      throw new notFoundException(en['products-not-found']);
     }
   }
 
   async FindProductById(store, id) {
     try {
-      const product = await this.repository.FindProductById({store, _id: id});
+      const product = await this.repository.FindProductById({ store, _id: id });
       return product;
     } catch (error) {
       throw new notFoundException(en['stores-not-found']);
+    }
+  }
+
+  async GetProductImages(uid, store, nextCursor) {
+    try {
+      const images = await cloudinary.api.resources({
+        type: 'upload',
+        prefix: `chatbizz/users/${uid}/products/store_${store}`,
+        max_results: 20,
+        next_cursor: nextCursor
+      });
+
+      return images;
+    } catch (error) {
+      console.log(error);
+      throw notFoundException(error.message);
     }
   }
 }

@@ -24,14 +24,20 @@ var ProductSchema = new Schema({
   currency: {
     type: String,
     required: [true, en['currency-required']],
-    enum: {values: ['NGN', 'USD', 'GBP', 'EUR', 'CAD'], message: en['currency-not-supported'] },
+    enum: {
+      values: ['NGN', 'USD', 'GBP', 'EUR', 'CAD'],
+      message: en['currency-not-supported'],
+    },
   },
   stock: {
     type: Number,
   },
   stockUnit: {
     type: String,
-    enum: {values: ['Cartons', 'Palletes', 'Packets', 'Boxes', 'Pieces'], message: en['stock-unit-not-supported']},
+    enum: {
+      values: ['Cartons', 'Palletes', 'Packets', 'Boxes', 'Pieces'],
+      message: en['stock-unit-not-supported'],
+    },
   },
   weight: {
     type: Number,
@@ -44,32 +50,30 @@ var ProductSchema = new Schema({
   },
   weightUnit: {
     type: String,
-    enum: {values: ['Kg', 'Lbs'], message: en['weight-not-supported']},
+    enum: { values: ['Kg', 'Lbs'], message: en['weight-not-supported'] },
   },
   dimensions: {
     type: String,
   },
   users: {
     type: String,
-    enum: {values: ['Children', 'Adults', 'All'], message: en['users-not-supported']},
-    default: 'All'
+    enum: {
+      values: ['Children', 'Adults', 'All'],
+      message: en['users-not-supported'],
+    },
+    default: 'All',
   },
   sex: {
     type: String,
-    enum: {values: ['Male', 'Female', 'All'], message: en['sex-not-supported']},
-    default: 'All'
+    enum: {
+      values: ['Male', 'Female', 'Unisex'],
+      message: en['sex-not-supported'],
+    },
+    default: 'Unisex',
   },
   images: [
     {
-      type: String,
-      validate: {
-        validator: function (v) {
-          return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(
-            v,
-          );
-        },
-        message: en['image-url-format'],
-      },
+      type: Object,
     },
   ],
   colors: [
@@ -86,30 +90,33 @@ var ProductSchema = new Schema({
     {
       type: String,
       validate: {
-        validator: function(v) {
-          return /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-z]{2,63}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(v);
+        validator: function (v) {
+          return /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/.test(
+            v,
+          );
         },
-        message:  en['video-url-format']
-      }
+        message: en['video-url-format'],
+      },
     },
   ],
-  variants: [{
-    id: {
-      type: Schema.Types.ObjectId,
-      ref: 'variants'
+  variants: [
+    {
+      id: {
+        type: Schema.Types.ObjectId,
+        ref: 'variants',
+      },
+      image: { type: String },
+
+      name: {
+        type: String,
+      },
     },
-    images: [
-      {type: String},
-    ],
-    name: {
-      type: String,
-    }
-  }],
+  ],
   active: {
     type: Boolean,
     default: true,
-    required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('products', ProductSchema);
