@@ -4,6 +4,7 @@ const Redis = require('ioredis');
 require('dotenv').config();
 const dbConfig = config.get('database');
 const redisConfig = config.get('redis');
+const cloudinaryConfig = config.get('cloudinary');
 let cloudinary = require('cloudinary').v2;
 
 async function connectToDatabase(DB_URL = dbConfig.URL) {
@@ -22,9 +23,9 @@ async function connectToDatabase(DB_URL = dbConfig.URL) {
 }
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  cloud_name: cloudinaryConfig.cloudName,
+  api_key: cloudinaryConfig.apiKey,
+  api_secret: cloudinaryConfig.apiSecret,
 });
 
 const redis = new Redis(redisConfig.URL);
