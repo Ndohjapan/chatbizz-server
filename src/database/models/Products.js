@@ -66,10 +66,10 @@ var ProductSchema = new Schema({
   sex: {
     type: String,
     enum: {
-      values: ['Male', 'Female', 'All'],
+      values: ['Male', 'Female', 'Unisex'],
       message: en['sex-not-supported'],
     },
-    default: 'All',
+    default: 'Unisex',
   },
   images: [
     {

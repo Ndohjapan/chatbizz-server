@@ -52,7 +52,7 @@ var VariantSchema = new Schema({
       validator: function (v) {
         return typeof v === 'number';
       },
-      message: en['weight-format'],
+      message: en['variant-weight-format'],
     },
   },
   weightUnit: {
@@ -83,10 +83,10 @@ var VariantSchema = new Schema({
   sex: {
     type: String,
     enum: {
-      values: ['Male', 'Female', 'All'],
+      values: ['Male', 'Female', 'Unisex'],
       message: en['sex-not-supported'],
     },
-    default: 'All',
+    default: 'Unisex',
   },
   active: {
     type: Boolean,

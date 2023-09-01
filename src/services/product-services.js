@@ -32,7 +32,7 @@ class ProductService {
       let product = await this.repository.CreateProduct(productData);
 
       const variantData = variants.map((variant) => {
-        return { ...variant, product: product._id, image: variant.images[0].secure_url };
+        return { ...variant, product: product._id, image: variant.images[0]?.secure_url };
       });
 
       variants = await this.variantRepository.CreateVariant(variantData);
@@ -70,7 +70,7 @@ class ProductService {
     try {
       const images = await cloudinary.api.resources({
         type: 'upload',
-        prefix: `chatbizz/users/${uid}/products/store_12345`,
+        prefix: `chatbizz/users/${uid}/products/store_${store}`,
         max_results: 20,
         next_cursor: nextCursor
       });

@@ -17,10 +17,17 @@ const validateCreateProductInput = [
     .custom((value) => mongoose.Types.ObjectId.isValid(value))
     .withMessage(en['store-id-format']),
   check('description')
-    .optional()
+    .notEmpty()
+    .withMessage(en['description-required'])
+    .bail()
     .isString()
     .withMessage(en['description-format']),
-  check('features').optional().isString().withMessage(en['features-format']),
+  check('features')
+    .notEmpty()
+    .withMessage(en['features-required'])
+    .bail()
+    .isString()
+    .withMessage(en['features-format']),
   check('price')
     .notEmpty()
     .withMessage(en['price-required'])
@@ -33,7 +40,12 @@ const validateCreateProductInput = [
     .bail()
     .isIn('NGN', 'USD', 'GBP', 'EUR', 'CAD')
     .withMessage(en['currency-not-supported']),
-  check('stock').optional().isNumeric().withMessage(en['stock-format']),
+  check('stock')
+    .notEmpty()
+    .withMessage(en['stock-format'])
+    .bail()
+    .isNumeric()
+    .withMessage(en['stock-format']),
   check('stockUnit')
     .optional()
     .custom((value) => {
@@ -64,7 +76,7 @@ const validateCreateProductInput = [
   check('sex')
     .optional()
     .custom((value) => {
-      if (!['Male', 'Female', 'All'].includes(value)) {
+      if (!['Male', 'Female', 'Unisex'].includes(value)) {
         throw new Error(en['sex-not-supported']);
       }
       return true;
@@ -136,7 +148,7 @@ const validateCreateProductInput = [
       return true;
     })
     .withMessage(en['video-url-format']),
-  body('variants')
+  check('variants')
     .isArray()
     .withMessage(en['variants-array'])
     .custom((variants) => {
@@ -191,26 +203,29 @@ const validateCreateProductInput = [
         }
 
         if (variant.weightUnit && !['Kg', 'Lbs'].includes(variant.weightUnit)) {
-          throw new Error(en['weight-not-supported']);
+          throw new Error(en['variant-weight-not-supported']);
         }
 
         if (variant.dimensions && typeof variant.dimensions !== 'string') {
-          throw new Error(en['dimension-format']);
+          throw new Error(en['variant-dimension-format']);
         }
 
         if (
           variant.users &&
           !['Children', 'Adults', 'All'].includes(variant.users)
         ) {
-          throw new Error(en['users-not-supported']);
+          throw new Error(en['variant-users-not-supported']);
         }
 
-        if (variant.sex && !['Male', 'Female', 'All'].includes(variant.sex)) {
-          throw new Error(en['sex-not-supported']);
+        if (
+          variant.sex &&
+          !['Male', 'Female', 'Unisex'].includes(variant.sex)
+        ) {
+          throw new Error(en['variant-sex-not-supported']);
         }
 
         if (variant.image && !Array.isArray(variant.images)) {
-          throw new Error(en['image-array']);
+          throw new Error(en['variant-image-array']);
         }
 
         if (variant.image) {
@@ -222,19 +237,19 @@ const validateCreateProductInput = [
         }
 
         if (variant.colors && !Array.isArray(variant.colors)) {
-          throw new Error(en['colors-array']);
+          throw new Error(en['variant-colors-array']);
         }
 
         if (variant.colors) {
           variant.colors.forEach((color) => {
             if (typeof color !== 'string') {
-              throw new Error(en['colors-fomrat']);
+              throw new Error(en['variant-colors-fomrat']);
             }
           });
         }
 
         if (variant.sizes && !Array.isArray(variant.sizes)) {
-          throw new Error(en['sizes-array']);
+          throw new Error(en['variant-sizes-array']);
         }
 
         if (variant.sizes) {
