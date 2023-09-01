@@ -37,7 +37,7 @@ class StoreService {
   async CreateQr(whatsappNumber, user) {
     const storeExists = await this.repository.FindStoreByWANumber({
       whatsappNumber,
-    });
+    });    
 
     if (storeExists && storeExists.user == user) {
       if (!storeExists.whatsappConnected) {

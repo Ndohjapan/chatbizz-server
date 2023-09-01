@@ -35,9 +35,9 @@ router.get(
   rateLimiter({ secondsWindow: 60, allowedHits: 5 }),
   userAuth,
   validateQRCodePhoneParams,
-  catchAsync(async (req, res, next) => {
+  catchAsync(async (req, res) => {
     let whatsappNumber = req.params.phone;
-    const user = req.user._id;
+    const user = req.user._id.toString();
     const socket = req.app.get('socket');
     await service.CreateQr(whatsappNumber, user);
     res.send(true);
