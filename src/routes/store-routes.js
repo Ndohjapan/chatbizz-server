@@ -19,7 +19,7 @@ const repository = new StoreRepository();
 
 router.post(
   '/',
-  rateLimiter({ secondsWindow: 60, allowedHits: 5 }),
+  rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
   userAuth,
   validateCreateStoreInput,
   catchAsync(async (req, res) => {
