@@ -112,6 +112,9 @@ var ProductSchema = new Schema({
       },
     },
   ],
+  testimonials: [
+    {type: Object}
+  ],
   active: {
     type: Boolean,
     default: true,

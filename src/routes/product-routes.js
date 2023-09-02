@@ -22,6 +22,18 @@ router.post(
 );
 
 router.get(
+  '/:productId/store/:storeId',
+  rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
+  userAuth,
+  catchAsync(async (req, res) => {
+    const store = req.params.storeId;
+    const productId = req.params.productId;
+    const product = await service.FindProductById(store, productId);
+    res.send(product);
+  }),
+);
+
+router.get(
   '/store/:storeId',
   rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
   userAuth,
