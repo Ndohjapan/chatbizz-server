@@ -23,7 +23,7 @@ class ProductService {
       });
 
       if (!storeExists) {
-        throw new notFoundException(en['stores-not-found']);
+        throw new notFoundException(en['products-not-found']);
       }
 
       let variants = productData.variants;
@@ -37,8 +37,12 @@ class ProductService {
 
       variants = await this.variantRepository.CreateVariant(variantData);
 
+      variants = variants.map((variant) => {
+        return {...variant.toObject(), image: variant.images[0]?.secure_url};
+      });
+
       product = await this.repository.UpdateProductById(store, product._id, {
-        variants: variantData
+        variants
       });
 
       return product;
@@ -62,7 +66,7 @@ class ProductService {
       const product = await this.repository.FindProductById({ store, _id: id });
       return product;
     } catch (error) {
-      throw new notFoundException(en['stores-not-found']);
+      throw new notFoundException(en['products-not-found']);
     }
   }
 

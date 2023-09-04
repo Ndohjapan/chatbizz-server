@@ -35,6 +35,7 @@ class VariantRepository {
         _id,
         active: true,
       }).lean();
+
       if (variant) {
         return variant;
       }
