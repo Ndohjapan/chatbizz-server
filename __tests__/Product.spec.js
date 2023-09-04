@@ -4,7 +4,7 @@ require('./resources/setup');
 const en = require('../locale/en');
 const { userLogin, createStores } = require('./resources/frequent-functions');
 const mockdata = require('./resources/mockdata');
-const { Products } = require('../src/database/models');
+const { Products, Variants } = require('../src/database/models');
 
 let token;
 
@@ -46,7 +46,7 @@ describe('Create Product', () => {
 
     const productDb = await Products.find({});
 
-    console.log(productDb[0].variants);
+    const variantsDb = await Variants.find({});
 
     expect(response.body.name).toBe(mockdata.product1.name);
     expect(response.body.variants[0].image).toBe(mockdata.product1.variants[0].images[0].secure_url);
@@ -65,6 +65,23 @@ describe('Create Product', () => {
     });
 
     expect(response.status).toBe(200);
+  });
+
+  it('check - ensure the variants id are actually created and stored ', async() => {
+    const auth = await userLogin();
+    token = auth.token;
+
+    const store = await createStores(auth.user._id, 1);
+
+    const response = await createProduct({
+      ...mockdata.product1,
+      store: store[0]._id,
+      variants: [{...mockdata.product1.variants[0], weight: undefined}]
+    });
+
+    const variantInDb = await Variants.find({});
+
+    expect(response.body.variants[0]._id).toBe(variantInDb[0]._id.toString());
   });
 
   it('return - HTTP 400 when we pass an empty stock in a variant', async() => {
