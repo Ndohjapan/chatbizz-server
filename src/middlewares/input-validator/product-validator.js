@@ -38,8 +38,15 @@ const validateCreateProductInput = [
     .notEmpty()
     .withMessage(en['currency-required'])
     .bail()
-    .isIn('NGN', 'USD', 'GBP', 'EUR', 'CAD')
-    .withMessage(en['currency-not-supported']),
+    .custom((value) => {
+      if (
+        !['NGN', 'USD', 'GBP', 'EUR', 'CAD'].includes(value)
+      ) {
+        throw new Error(en['currency-not-supported']);
+      }
+
+      return true;
+    }),
   check('stock')
     .notEmpty()
     .withMessage(en['stock-format'])

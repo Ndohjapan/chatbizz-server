@@ -1,8 +1,8 @@
 module.exports = {
   product1: {
     name: 'EAZ LIFT Camco Eaz-Lift',
-    descrition: '',
-    features: '',
+    description: 'This is the description',
+    features: 'This is the features',
     price: 200,
     currency: 'NGN',
     stock: 300,
@@ -11,7 +11,7 @@ module.exports = {
     weightUnit: 'Kg',
     dimensions: '',
     users: 'All',
-    sex: 'All',
+    sex: 'Unisex',
     images: [
       {
         asset_id: '0b1c66d2339a84a0c14b30caf4bd4a32',
@@ -98,7 +98,7 @@ The heavy-duty 2 5/16-inch ball has a 15,000 lb. maximum rating`,
         stockUnit: 'Pieces',
         dimensions: '',
         users: 'All',
-        sex: 'All',
+        sex: 'Female',
       },
       {
         name: 'Eaz-Lift 48783 ReCurve R6 Weight Distribution Hitch, 800 lb., 15K - Features Adaptive Sway Control Making Manuevering Smoother and Easier on the Driver and a 1,000 lb. Maximum Tongue Weight Rating',
@@ -164,7 +164,7 @@ The heavy-duty 2 5/16-inch ball has a 15,000 lb. maximum rating`,
         stockUnit: 'Pieces',
         dimensions: '',
         users: 'All',
-        sex: 'All',
+        sex: 'Male',
       },
     ],
   },

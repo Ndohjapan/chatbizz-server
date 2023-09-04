@@ -101,7 +101,7 @@ var ProductSchema = new Schema({
   ],
   variants: [
     {
-      id: {
+      _id: {
         type: Schema.Types.ObjectId,
         ref: 'variants',
       },
