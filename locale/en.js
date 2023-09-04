@@ -17,6 +17,7 @@ module.exports = {
   'image-array': 'Image must be an array',
   'variant-image-array': 'Variant images must be an array',
   'image-url-format': 'Images must be a valid object',
+  'id-format-required': 'Id is required',
   'variant-image-url-format': 'Variant images must be a valid object',
   'image-url-required': 'Image url is required',
   'is-variant-required': 'isVariant is required',

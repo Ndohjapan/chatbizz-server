@@ -70,6 +70,28 @@ class ProductService {
     }
   }
 
+  async UpdateProduct(updateData, productId) {
+    try {
+      const { store } = updateData;
+
+      const productExists = await this.repository.FindProductById({
+        store,
+        _id: productId,
+      });
+
+      if (!productExists) {
+        throw new notFoundException(en['products-not-found']);
+      }
+
+      let product = await this.repository.UpdateProductById(store, productId, updateData);
+
+      return product;
+    } catch (error) {
+      console.log(error);
+      throw new createException(error.message);
+    }
+  }
+
   async GetProductImages(uid, store, nextCursor) {
     try {
       const images = await cloudinary.api.resources({

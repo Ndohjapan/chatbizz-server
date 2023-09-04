@@ -39,9 +39,7 @@ const validateCreateProductInput = [
     .withMessage(en['currency-required'])
     .bail()
     .custom((value) => {
-      if (
-        !['NGN', 'USD', 'GBP', 'EUR', 'CAD'].includes(value)
-      ) {
+      if (!['NGN', 'USD', 'GBP', 'EUR', 'CAD'].includes(value)) {
         throw new Error(en['currency-not-supported']);
       }
 
@@ -280,4 +278,168 @@ const validateCreateProductInput = [
   },
 ];
 
-module.exports = { validateCreateProductInput };
+const validateUpdateProductInput = [
+  check('name').optional().isString().withMessage(en['store-name-format']),
+  check('store')
+    .optional()
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage(en['store-id-format']),
+  check('description')
+    .optional()
+    .isString()
+    .withMessage(en['description-format']),
+  check('features').optional().isString().withMessage(en['features-format']),
+  check('price').optional().isNumeric().withMessage(en['price-format']),
+  check('currency')
+    .optional()
+    .custom((value) => {
+      if (!['NGN', 'USD', 'GBP', 'EUR', 'CAD'].includes(value)) {
+        throw new Error(en['currency-not-supported']);
+      }
+
+      return true;
+    }),
+  check('stock').optional().isNumeric().withMessage(en['stock-format']),
+  check('stockUnit')
+    .optional()
+    .custom((value) => {
+      if (
+        !['Cartons', 'Palletes', 'Packets', 'Pieces', 'Boxes'].includes(value)
+      ) {
+        throw new Error(en['stock-unit-not-supported']);
+      }
+
+      return true;
+    })
+    .withMessage(en['stock-unit-not-supported']),
+  check('weight').optional().isNumeric().withMessage(en['weight-format']),
+  check('weightUnit')
+    .optional()
+    .isIn('Kgs', 'Lbs')
+    .withMessage(en['weight-not-supported']),
+  check('dimensions').optional().isString().withMessage(en['dimension-format']),
+  check('users')
+    .optional()
+    .custom((value) => {
+      if (!['Children', 'Adults', 'All'].includes(value)) {
+        throw new Error(en['users-not-supported']);
+      }
+      return true;
+    })
+    .withMessage(en['users-not-supported']),
+  check('sex')
+    .optional()
+    .custom((value) => {
+      if (!['Male', 'Female', 'Unisex'].includes(value)) {
+        throw new Error(en['sex-not-supported']);
+      }
+      return true;
+    })
+    .withMessage(en['sex-not-supported']),
+  check('images')
+    .optional()
+    .custom((images) => {
+      if (!Array.isArray(images)) {
+        throw new Error(en['image-array']);
+      }
+
+      images.forEach((image) => {
+        if (typeof image !== 'object') {
+          throw new Error(en['image-url-format']);
+        }
+      });
+
+      return true;
+    })
+    .withMessage(en['image-url-format']),
+  check('colors')
+    .optional()
+    .custom((colors) => {
+      if (!Array.isArray(colors)) {
+        throw new Error(en['colors-array']);
+      }
+
+      colors.forEach((color) => {
+        if (typeof color !== 'string') {
+          throw new Error(en['colors-fomrat']);
+        }
+      });
+
+      return true;
+    }),
+  check('sizes')
+    .optional()
+    .custom((sizes) => {
+      if (!Array.isArray(sizes)) {
+        throw new Error(en['sizes-array']);
+      }
+
+      sizes.forEach((size) => {
+        if (typeof size !== 'string') {
+          throw new Error(en['sizes-format']);
+        }
+      });
+
+      return true;
+    }),
+  check('videos')
+    .optional()
+    .custom((videos) => {
+      if (!Array.isArray(videos)) {
+        throw new Error('Videos must be an array');
+      }
+
+      videos.forEach((video) => {
+        const youtubeRegex =
+          /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+
+        const isValidYoutubeUrl = youtubeRegex.test(video);
+        if (!isValidYoutubeUrl) {
+          throw new Error(en['video-url-format']);
+        }
+      });
+
+      return true;
+    })
+    .withMessage(en['video-url-format']),
+  check('variants')
+    .optional()
+    .isArray()
+    .withMessage(en['variants-array'])
+    .custom((variants) => {
+      if (!Array.isArray(variants)) {
+        throw new Error(en['variants-array']);
+      }
+
+      variants.forEach((variant) => {
+        if (variant && typeof variant !== 'object') {
+          throw new Error(en['variant-object']);
+        }
+
+        // Validate individual fields in each variant object
+        if (variant.name && typeof variant.name !== 'string') {
+          throw new Error(en['variant-name-format']);
+        }
+
+        if (variant.image && typeof variant.image !== 'string') {
+          throw new Error(en['image-url-required']);
+        }
+
+        if (variant._id && typeof variant._id !== 'string') {
+          throw new Error(en['id-format-required']);
+        }
+      });
+
+      return true;
+    }),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new ValidationException(errors.array()));
+    }
+    next();
+  },
+];
+
+module.exports = { validateCreateProductInput, validateUpdateProductInput };
