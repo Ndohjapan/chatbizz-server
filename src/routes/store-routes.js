@@ -45,6 +45,7 @@ router.get(
     const client = new Client({
       puppeteer: {
         headless: true,
+        
       },
       authStrategy: new LocalAuth({
         clientId: whatsappNumber,
