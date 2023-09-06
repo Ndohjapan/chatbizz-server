@@ -61,6 +61,28 @@ class VariantService {
       throw new notFoundException(en['variants-not-found']);
     }
   }
+
+  async DeleteVariantById(product, variantId) {
+    try {
+
+      const variantExists = await this.repository.FindVariantById({
+        product,
+        _id: variantId,
+      });
+
+      if (!variantExists) {
+        throw new notFoundException(en['variants-not-found']);
+      }
+
+      await this.repository.DeleteVariantById(
+        product,
+        variantId
+      );
+      return {message: en['variant-deleted']};
+    } catch (error) {
+      throw new notFoundException(en['variants-not-found']);
+    }
+  }
 }
 
 module.exports = { VariantService };

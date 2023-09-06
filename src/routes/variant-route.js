@@ -47,4 +47,16 @@ router.put(
   }),
 );
 
+router.delete(
+  '/:variantId/products/:productId',
+  rateLimiter({ secondsWindow: 60, allowedHits: 30 }),
+  userAuth,
+  catchAsync(async (req, res) => {
+    const variantId = req.params.variantId;
+    const productId = req.params.productId;
+    const variant = await service.DeleteVariantById(productId, variantId);
+    res.send(variant);
+  }),
+);
+
 module.exports = router;

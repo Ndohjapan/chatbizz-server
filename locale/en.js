@@ -66,6 +66,7 @@ module.exports = {
   'variants-update-failure': 'Cannot update variant',
   'variant-name-format':'Variant name is required',
   'variant-description-format':'Variant description is required',
+  'variant-deleted':'Variant deleted succesfully',
   'variant-features-format':'Variant features is required',
   'variant-price-format':'Variant price is required',
   'variant-currency-format':'Variant currency is required',
