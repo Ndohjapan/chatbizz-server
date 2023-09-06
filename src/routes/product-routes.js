@@ -4,7 +4,7 @@ const catchAsync = require('../utils/catch-async');
 const { rateLimiter } = require('../middlewares/rate-limiter');
 const { ProductService } = require('../services/product-services');
 const { userAuth } = require('../middlewares/protect');
-const { validateCreateProductInput } = require('../middlewares/input-validator/product-validator');
+const { validateCreateProductInput, validateUpdateProductInput } = require('../middlewares/input-validator/product-validator');
 
 const service = new ProductService();
 
@@ -20,6 +20,7 @@ router.post(
     res.send(product);
   }),
 );
+
 
 router.get(
   '/:productId/store/:storeId',
@@ -41,6 +42,19 @@ router.get(
     const store = req.params.storeId;
     const products = await service.FindAllProducts(store);
     res.send(products);
+  }),
+);
+
+router.put(
+  '/:productId',
+  rateLimiter({ secondsWindow: 60, allowedHits: 15 }),
+  userAuth,
+  validateUpdateProductInput,
+  catchAsync(async (req, res) => {
+    const productData = req.body;
+    const productId = req.params.productId;
+    const product = await service.UpdateProduct(productData, productId);
+    res.send(product);
   }),
 );
 
