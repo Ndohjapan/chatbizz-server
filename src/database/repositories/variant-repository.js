@@ -57,6 +57,20 @@ class VariantRepository {
       throw internalException(en['variants-update-failure']);
     }
   }
+
+  async DeleteVariantById(product, _id) {
+    try {
+      await Variants.findOneAndUpdate(
+        { product, _id, active: true },
+        {$set: {active: false}},
+        { new: true },
+      ).lean();
+      return true;
+    } catch (error) {
+      throw internalException(en['variants-update-failure']);
+    }
+  }
+
 }
 
 module.exports = VariantRepository;
