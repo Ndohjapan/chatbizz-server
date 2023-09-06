@@ -1,10 +1,29 @@
 const en = require('../../locale/en');
+const ProductRepository = require('../database/repositories/product-repository');
 const VariantRepository = require('../database/repositories/variant-repository');
 const notFoundException = require('../errors/not-found-exception');
 
 class VariantService {
   constructor() {
     this.repository = new VariantRepository();
+    this.productRepository = new ProductRepository();
+  }
+  
+  async CreateVariant(variantData) {
+    try {
+      const { store, product } = variantData;
+
+      const productExists = await this.productRepository.FindProductById({store, _id: product});
+
+      if (!productExists) {
+        throw new notFoundException(en['products-not-found']);
+      }
+
+      const variant = await this.repository.CreateVariant(variantData);
+      return variant;
+    } catch (error) {
+      throw new notFoundException(en['variants-not-found']);
+    }
   }
 
   async FindVariantById(product, id) {

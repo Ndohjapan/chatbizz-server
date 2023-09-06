@@ -37,7 +37,7 @@ module.exports = {
   'rate-limit-exceeded': 'Too many requests. Try again later',
   'server-error': 'Something went wrong',
   'sex-not-supported': 'Sex must be one of Male, Female or Unisex',
-  'variant-sex-not-supported': 'Variant sex must be one of Male, Female or All',
+  'variant-sex-not-supported': 'Variant sex must be one of Male, Female or Unisex',
   'sizes-array': 'Sizes must be an array',
   'varaint-sizes-array': 'Variant sizes must be an array',
   'sizes-format': 'Sizes must be a string',
