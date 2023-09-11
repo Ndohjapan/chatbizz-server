@@ -44,8 +44,7 @@ router.get(
     whatsappNumber = whatsappNumber.split('+')[1];
     const client = new Client({
       puppeteer: {
-        headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        headless: true
       },
       authStrategy: new LocalAuth({
         clientId: whatsappNumber,

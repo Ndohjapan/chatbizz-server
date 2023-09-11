@@ -132,3 +132,5 @@ serviceAccount.json
 # wwebjs
 .wwebjs_auth
 .wwebjs_cache
+
+pem
